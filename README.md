@@ -26,3 +26,5 @@ Feature List:
 - [ ] Zoom
 - [ ] Live edit for existing bodies
 - [ ] More advanced collision response (shattering and fusing objects, material properties)
+
+![Screenshot](/OrbitalSim-android/assets/screenshots/orbital simulator screenshot.jpg)
