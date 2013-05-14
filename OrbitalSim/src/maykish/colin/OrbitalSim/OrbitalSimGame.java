@@ -31,7 +31,7 @@ public class OrbitalSimGame implements ApplicationListener, InputProcessor {
 	private ArrayList<Body> bodies;
 	
 	// Flags
-	private boolean collide = false;
+	private boolean collide = true;
 	private boolean blackholeSun = true;
 	
 	@Override
