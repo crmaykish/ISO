@@ -12,7 +12,7 @@ public class Body {
 	private boolean destroyed;
 	private boolean fixed;
 	
-	private float elasticity = 0.4f; // elasticity of collisions - 1.0 is completely elastic, 0.0 is completely inelastic, theoretically anyway
+	private float elasticity = 0.6f; // elasticity of collisions - 1.0 is completely elastic, 0.0 is completely inelastic, theoretically anyway
 
 	public Body(Texture texture, float mass, Vector2 initPosition, Vector2 initVelocity, boolean fixed) {
 		this.texture = texture;
