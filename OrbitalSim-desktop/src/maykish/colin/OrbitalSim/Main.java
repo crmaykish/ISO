@@ -8,8 +8,8 @@ public class Main {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "OrbitalSim";
 		cfg.useGL20 = false;
-		cfg.width = 800;
-		cfg.height = 600;
+		cfg.width = 1280;
+		cfg.height = 720;
 		
 		new LwjglApplication(new OrbitalSimGame(), cfg);
 	}

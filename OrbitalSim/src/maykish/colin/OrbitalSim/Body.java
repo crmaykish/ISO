@@ -2,7 +2,6 @@ package maykish.colin.OrbitalSim;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public class Body {
@@ -10,34 +9,34 @@ public class Body {
 	private float mass;
 	private Vector2 position;
 	private Vector2 velocity;
-	private Body parent;
+	private boolean destroyed;
+	private boolean fixed;
+	
+	private float elasticity = 0.4f; // elasticity of collisions - 1.0 is completely elastic, 0.0 is completely inelastic, theoretically anyway
 
-	private float G = 0.1f;
-	private float elasticity = 0.1f; // elasticity of collisions - 1.0 is completely elastic, 0.0 is completely inelastic
-
-	public Body(Texture texture, float mass, Body parent, Vector2 initPosition, Vector2 initVelocity) {
+	public Body(Texture texture, float mass, Vector2 initPosition, Vector2 initVelocity, boolean fixed) {
 		this.texture = texture;
 		this.mass = mass;
-		this.parent = parent;
 		this.position = initPosition;
 		this.velocity = initVelocity;
+		this.fixed = fixed;
+		this.destroyed = false;
 	}
 
-	public void update() {
-		if (parent != null){
-			// get acceleration from the gravity of the parent body
-			Vector2 radius = parent.getCenter().sub(position);
-			float accel = (G * parent.getMass()) / radius.len2();
-			Vector2 netAccel = radius.nor().scl(accel);
-			
-			velocity = velocity.add(netAccel);
+	public void addVelocity(Vector2 vel){
+		if (!fixed){
+			velocity = velocity.add(vel);
 		}
-		
-		setCenter(getCenter().add(velocity));
+	}
+	
+	public void updatePosition(){
+		if (!fixed){
+			position = position.add(velocity);
+		}
 	}
 	
 	public boolean checkCollision(Body otherBody){
-		float distance = otherBody.getCenter().dst(getCenter());
+		float distance = otherBody.getPosition().dst(getPosition());
 		
 		if (distance < getRadius() + otherBody.getRadius()){
 			return true;
@@ -46,13 +45,18 @@ public class Body {
 	}
 	
 	public void reactToCollision(Body otherBody){
-		Vector2 difference = getCenter().cpy().sub(otherBody.getCenter());
+		Vector2 difference = getPosition().cpy().sub(otherBody.getPosition());
 		float d = difference.cpy().len();
 		
 		Vector2 mtd = difference.cpy().scl(((getRadius() + otherBody.getRadius()) - d) / d);
 		
 		float im1 = 1 / mass;
 		float im2 = 1 / otherBody.getMass();
+		
+		if (!fixed){
+			position = position.add(mtd.cpy().scl(im1 / (im1 + im2)));
+		}
+		otherBody.setPosition(otherBody.getPosition().sub(mtd.cpy().scl(im2 / (im1 + im2))));
 		
 		Vector2 v = velocity.cpy().sub(otherBody.getVelocity());
         Vector2 mtdN = mtd.cpy();
@@ -67,24 +71,25 @@ public class Body {
         float i = (-(1.0f + elasticity) * vn) / (im1 + im2);
         Vector2 impulse = mtdN.cpy().scl(i);
 
-        if (parent != null){	// This currently indicates it's a star, needs to change
+        if (!fixed){
         	velocity = velocity.add(impulse.cpy().scl(im1));
         }
-        if (otherBody.getParent() != null){	// Indicates it is not a star
+        if (!otherBody.getFixed()){
         	otherBody.setVelocity(otherBody.getVelocity().sub(impulse.cpy().scl(im2)));
         }
-		
 	}
 	
 	public void draw(SpriteBatch sb){
-		sb.draw(texture, position.x, position.y);
+		sb.draw(texture, position.x - texture.getWidth() / 2, position.y - texture.getHeight() / 2);
 	}
 	
 	public Vector2 getVelocity(){
 		return velocity.cpy();
 	}
 	public void setVelocity(Vector2 velocity){
-		this.velocity = velocity;
+		if (!fixed){
+			this.velocity = velocity;
+		}
 	}
 	public float getMass(){
 		return mass;
@@ -92,18 +97,26 @@ public class Body {
 	public void addMass(float mass){
 		this.mass += mass;
 	}
-	public Vector2 getCenter(){
-		int size = texture.getWidth();
-		return new Vector2(position.x + size / 2, position.y + size / 2);
+	public Vector2 getPosition(){
+		return position.cpy();
 	}
-	public void setCenter(Vector2 center){
-		this.position.x = center.x - getRadius();
-		this.position.y = center.y - getRadius();
+	public void setPosition(Vector2 pos){
+		if (!fixed){
+			position = pos;
+		}
 	}
 	public int getRadius(){
 		return texture.getWidth() / 2;
 	}
-	public Body getParent(){
-		return parent;
+	public boolean getFixed(){
+		return fixed;
+	}
+	
+	public boolean isDestroyed(){
+		return destroyed;
+	}
+	
+	public void setDestroyed(){
+		destroyed = true;
 	}
 }
