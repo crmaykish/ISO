@@ -1,11 +1,11 @@
 package maykish.colin.OrbitalSim;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public class Body {
-	private Texture texture;
+	private TextureRegion texture;
 	private float mass;
 	private Vector2 position;
 	private Vector2 velocity;
@@ -14,7 +14,7 @@ public class Body {
 	
 	private float elasticity = 0.6f; // elasticity of collisions - 1.0 is completely elastic, 0.0 is completely inelastic, theoretically anyway
 
-	public Body(Texture texture, float mass, Vector2 initPosition, Vector2 initVelocity, boolean fixed) {
+	public Body(TextureRegion texture, float mass, Vector2 initPosition, Vector2 initVelocity, boolean fixed) {
 		this.texture = texture;
 		this.mass = mass;
 		this.position = initPosition;
@@ -80,7 +80,7 @@ public class Body {
 	}
 	
 	public void draw(SpriteBatch sb){
-		sb.draw(texture, position.x - texture.getWidth() / 2, position.y - texture.getHeight() / 2);
+		sb.draw(texture, position.x - texture.getRegionWidth() / 2, position.y - texture.getRegionHeight() / 2);
 	}
 	
 	public Vector2 getVelocity(){
@@ -106,7 +106,7 @@ public class Body {
 		}
 	}
 	public int getRadius(){
-		return texture.getWidth() / 2;
+		return texture.getRegionWidth() / 2;
 	}
 	public boolean getFixed(){
 		return fixed;

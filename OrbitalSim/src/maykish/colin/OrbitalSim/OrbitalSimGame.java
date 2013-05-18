@@ -53,9 +53,7 @@ public class OrbitalSimGame implements ApplicationListener, InputProcessor {
 		
 		sim = new Simulation(camera, batch);
 		
-		
 		Gdx.input.setInputProcessor(this);
-		
 		
 	}
 
@@ -70,7 +68,6 @@ public class OrbitalSimGame implements ApplicationListener, InputProcessor {
 			sim.render();
 		}
 		else {
-			
 			interbodyGravStatus = sim.getInterbodyGravity() ? "On" : "Off";
 			collisionsStatus = sim.getCollide() ? "On" : "Off";
 			fixedSunStatus = sim.getFixedSun() ? "On" : "Off";
@@ -78,7 +75,6 @@ public class OrbitalSimGame implements ApplicationListener, InputProcessor {
 			gStatus = sim.getG();
 			brushSizeStatus = sim.getBrushSize();
 			smallBodyStatus = sim.getSmallBody() ? "Small" : "Large";
-			
 			
 			batch.setProjectionMatrix(camera.combined);
 			batch.begin();

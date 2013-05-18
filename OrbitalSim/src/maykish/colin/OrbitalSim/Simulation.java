@@ -1,5 +1,6 @@
 package maykish.colin.OrbitalSim;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public class Simulation implements InputProcessor{
@@ -23,10 +25,19 @@ public class Simulation implements InputProcessor{
 	
 	private BitmapFont font;
 	
-	private Texture ball32;
-	private Texture ball16;
-	private Texture ball8;
-	private Texture background;
+	private DecimalFormat decFormat;
+	
+	private int zoom = 100;
+
+	private TextureRegion ball256;
+	private TextureRegion ball128;
+	private TextureRegion ball64;
+	private TextureRegion ball32;
+	private TextureRegion ball16;
+	private TextureRegion ball8;
+	private TextureRegion background;
+	
+	private Rocket rocket;
 	
 	private Body star;
 	private ArrayList<Body> bodies;
@@ -51,19 +62,35 @@ public class Simulation implements InputProcessor{
 	
 	public void initialize(){
 		// Load textures and fonts
-		ball32 = new Texture(Gdx.files.internal("ball32.png"));
-		ball16 = new Texture(Gdx.files.internal("ball16.png"));
-		ball8 = new Texture(Gdx.files.internal("ball8.png"));
-		background = new Texture(Gdx.files.internal("starfield.png"));
+		ball256 = new TextureRegion(new Texture(Gdx.files.internal("ball256.png")));
+		ball128 = new TextureRegion(new Texture(Gdx.files.internal("ball128.png")));
+		ball64 = new TextureRegion(new Texture(Gdx.files.internal("ball64.png")));
+		ball32 = new TextureRegion(new Texture(Gdx.files.internal("ball32.png")));
+		ball16 = new TextureRegion(new Texture(Gdx.files.internal("ball16.png")));
+		ball8 = new TextureRegion(new Texture(Gdx.files.internal("ball8.png")));
+		ball256.flip(false, true);
+		ball128.flip(false, true);
+		ball64.flip(false, true);
+		ball32.flip(false, true);
+		ball16.flip(false, true);
+		ball8.flip(false, true);
+		
+		background = new TextureRegion(new Texture(Gdx.files.internal("starfield.png")));
+		background.flip(false, true);
+		
 		font = new BitmapFont();
 		font.setScale(1, -1);
+		
+		decFormat = new DecimalFormat("#.###");
 		
 		// Initialize bodies and create a star at the center of the screen
 		bodies = new ArrayList<Body>();
 		stars = new ArrayList<Body>();
-		star = new Body(ball32, solarMass, new Vector2(Gdx.graphics.getWidth() / 2 - 16, Gdx.graphics.getHeight() / 2 - 16), new Vector2(0,0.0f), fixedSun);
+		star = new Body(ball256, solarMass, new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2), new Vector2(0,0.0f), fixedSun);
 		bodies.add(star);
 		stars.add(star);
+		
+		rocket = new Rocket(star);
 		
 		// Set up input processors
 		CameraInputProcessor cameraProcessor = new CameraInputProcessor(camera);
@@ -124,6 +151,10 @@ public class Simulation implements InputProcessor{
 	        }
 		}
 		
+		
+		rocket.update();
+		
+		
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		
@@ -133,10 +164,14 @@ public class Simulation implements InputProcessor{
 			b.draw(batch);
 		}
 		
+		rocket.draw(batch);
+		
 		font.drawMultiLine(batch, "Solar Mass: " + star.getMass() + "\n"
 								+ "System Mass: " + getTotalSystemMass() + "\n"
 								+ "Bodies: " + bodies.size() + "\n"
 								+ "G: " + Gs[G] + "\n"
+								+ "Velocity: " + decFormat.format(rocket.getVelocity()) +"\n"
+								+ "Altitude: " + decFormat.format(rocket.getAltitude()) + "\n"
 								, getTopLeftCorner(10,10).x, getTopLeftCorner(10, 10).y);
 		
 		batch.end();
@@ -160,11 +195,10 @@ public class Simulation implements InputProcessor{
 	
 	// Create a circle of bodies
 	private void createCircle(Vector2 center, Vector2 velocity){
-		Gdx.app.log("brushsize", brushSize + " ");
 		for (int i=0; i < 2*brushSize; i++){
 			for (int j=0; j< 2*brushSize; j++){
 				if (new Vector2(i,j).dst(brushSize, brushSize) < brushSize){
-					Texture tex = smallBodySize ? ball8 : ball16;
+					TextureRegion tex = smallBodySize ? ball8 : ball16;
 					int size = smallBodySize ? 8 : 16;
 					bodies.add(new Body(tex, 1000, new Vector2(center.x-(brushSize*size) + size*i, center.y-(brushSize*size) + size*j), velocity.cpy(), false));
 				}
@@ -239,14 +273,12 @@ public class Simulation implements InputProcessor{
 	}
 	
 	public void toggleBrushSize(){
-		if (brushSize == 9){
+		if (brushSize == 25){
 			brushSize = 1;
 		}
 		else {
 			brushSize += 2;
 		}
-		
-		Gdx.app.log("toggle", brushSize + " ");
 	}
 	
 	public int getBrushSize(){
@@ -306,6 +338,9 @@ public class Simulation implements InputProcessor{
 	}
 	@Override
 	public boolean scrolled(int amount) {
+		zoom -= amount;
+		Gdx.app.log("zoom", zoom + "");
+		
 		return false;
 	}
 }
