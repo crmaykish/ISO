@@ -1,4 +1,4 @@
-package maykish.colin.OrbitalSim;
+package maykish.colin.OrbitalSim.Input;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
