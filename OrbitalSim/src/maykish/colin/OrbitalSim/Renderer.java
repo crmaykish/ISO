@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 public class Renderer {
 	private SpriteBatch batch;
@@ -33,6 +34,7 @@ public class Renderer {
 	}
 	
 	public void render(Simulation sim){
+		
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		
@@ -44,7 +46,7 @@ public class Renderer {
 	
 	private void renderBackground(){
 		Vector2 topLeftCorner = getTopLeftCorner();
-		batch.draw(background, topLeftCorner.x, topLeftCorner.y);
+		batch.draw(background, topLeftCorner.x, topLeftCorner.y, 0, 0, background.getRegionWidth(), background.getRegionHeight(), camera.zoom, camera.zoom, 0);
 	}
 	
 	private void renderBodies(List<Body> bodies){
@@ -56,7 +58,9 @@ public class Renderer {
 	}
 	
 	private Vector2 getTopLeftCorner(){
-		return new Vector2(camera.position.x - Gdx.graphics.getWidth() / 2, camera.position.y - Gdx.graphics.getHeight() / 2);
+		Vector3 corner = new Vector3(0,0,0);
+		camera.unproject(corner);
+		return new Vector2(corner.x, corner.y);
 	}
 	
 	private void loadTexturesAndFonts(){

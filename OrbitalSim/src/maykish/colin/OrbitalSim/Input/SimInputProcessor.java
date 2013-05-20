@@ -2,8 +2,10 @@ package maykish.colin.OrbitalSim.Input;
 
 import maykish.colin.OrbitalSim.Simulation;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector3;
 
 public class SimInputProcessor implements InputProcessor{
 
@@ -17,12 +19,11 @@ public class SimInputProcessor implements InputProcessor{
 	
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		float x = screenX + camera.position.x - camera.viewportWidth / 2;
-		float y = screenY + camera.position.y - camera.viewportHeight / 2;
+		Vector3 touch = new Vector3(screenX, screenY, 0);
+		camera.unproject(touch);
+		sim.addCircle(touch.x, touch.y);
 
-		sim.addCircle(x, y);
-
-		return false;
+		return true;
 	}
 	
 	@Override

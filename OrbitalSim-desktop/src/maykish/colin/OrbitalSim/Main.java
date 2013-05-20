@@ -9,8 +9,8 @@ public class Main {
 		cfg.title = "OrbitalSim";
 		cfg.useGL20 = false;
 //		cfg.fullscreen = true;
-		cfg.width = 1900;
-		cfg.height = 1000;
+		cfg.width = 1280;
+		cfg.height = 720;
 		
 		new LwjglApplication(new OrbitalSim(), cfg);
 	}

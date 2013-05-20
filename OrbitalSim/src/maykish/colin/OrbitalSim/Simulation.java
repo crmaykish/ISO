@@ -16,12 +16,12 @@ public class Simulation{
 	// Settings
 	public boolean collide = true;
 	public boolean interbodyGravity = false;
-	public int G = 4;
+	public int G = 5;
 	public final float[] Gs = {0.0000001f, 0.000001f, 0.00001f, 0.0001f, 0.001f, 0.01f, 0.1f, 1.0f};
-	public float solarMass = 100000f;
+	public float solarMass = 1000000f;
 	
 	// Tool Settings
-	public int brushSize = 5;
+	public int brushSize = 10;
 	public int bodyRadius = 8;
 	public int bodyMass = 1000;
 	
@@ -57,7 +57,6 @@ public class Simulation{
 						float accel = (Gs[G] * other.mass) / radius.len2();
 						Vector2 net = radius.nor().scl(accel);
 						b.velocity.add(net);
-//						b.addVelocity(net);
 					}
 				}
 				b.position.add(b.velocity);
@@ -74,7 +73,6 @@ public class Simulation{
 						float accel = (Gs[G] * star.mass) / radius.len2();
 						Vector2 net = radius.nor().scl(accel);
 						b.velocity.add(net);
-//						b.addVelocity(net);
 					}
 				}
 				b.position.add(b.velocity);
@@ -105,12 +103,12 @@ public class Simulation{
 		createCircle(new Vector2(x, y), calculateCircularOrbitVelocity(x, y, stars.get(0)));
 	}
 
-	// Create a circle of bodies
-	private void createCircle(Vector2 center, Vector2 velocity) {
-		for (int i = 0; i < 2 * brushSize; i++) {
-			for (int j = 0; j < 2 * brushSize; j++) {
-				if (new Vector2(i, j).dst(brushSize, brushSize) < brushSize) {
-					bodies.add(new Body(bodyMass, bodyRadius, new Vector2(center.x-(brushSize*bodyRadius) + 2*bodyRadius*i, center.y-(brushSize*bodyRadius) + 2*bodyRadius*j), velocity.cpy()));
+	private void createCircle(Vector2 center, Vector2 velocity){
+		for (int i = -brushSize / 2; i < brushSize / 2; i++){
+			for (int j = -brushSize / 2; j < brushSize / 2; j++){
+				if (new Vector2(i, j).dst(0, 0) < brushSize / 2){
+					Vector2 pos = new Vector2(center.x + 2*i*bodyRadius, center.y + 2*j*bodyRadius);
+					bodies.add(new Body(bodyMass, bodyRadius, pos, velocity.cpy()));
 				}
 			}
 		}

@@ -1,6 +1,5 @@
 package maykish.colin.OrbitalSim.Input;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
@@ -68,6 +67,9 @@ public class CameraInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean scrolled(int amount) {
+		float level = (float)amount / 2;
+		if (camera.zoom + level >= 1.0f && camera.zoom + level < 20.0f)
+			camera.zoom += level;
 		return false;
 	}
 
