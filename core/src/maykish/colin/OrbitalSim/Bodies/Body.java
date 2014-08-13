@@ -29,38 +29,38 @@ public class Body{
 		return result;
 	}
 	
-//	public void reactToCollision(Body otherBody) {
-//		Vector2 difference = position.cpy().sub(otherBody.position);
-//		float d = difference.cpy().len();
-//
-//		Vector2 mtd = difference.cpy().scl(
-//				(radius + otherBody.radius - d) / d);
-//
-//		float im1 = 1 / mass;
-//		float im2 = 1 / otherBody.mass;
-//
-//		if (!fixed)
-//			position = position.cpy().add(mtd.cpy().scl(im1 / (im1 + im2)));
-//		if (!otherBody.fixed)
-//			otherBody.position = otherBody.position.cpy().sub(mtd.cpy().scl(im2 / (im1 + im2)));
-//
-//		Vector2 v = velocity.cpy().sub(otherBody.velocity);
-//		Vector2 mtdN = mtd.cpy();
-//		mtdN = mtdN.nor();
-//		float vn = v.cpy().dot(mtdN);
-//
-//		if (vn > 0.0f) {
-//			return;
-//		}
-//
-//		float i = (-(1.0f + elasticity) * vn) / (im1 + im2);
-//		Vector2 impulse = mtdN.cpy().scl(i);
-//
-//		if (!fixed)
-//			velocity = velocity.cpy().add(impulse.cpy().scl(im1));
-//		if (!otherBody.fixed)
-//			otherBody.velocity = otherBody.velocity.cpy().sub(impulse.cpy().scl(im2));
-//	}
+	public void reactToCollision(Body otherBody) {
+		Vector2 difference = position.cpy().sub(otherBody.position);
+		float d = difference.cpy().len();
+
+		Vector2 mtd = difference.cpy().scl(
+				(radius + otherBody.radius - d) / d);
+
+		float im1 = 1 / mass;
+		float im2 = 1 / otherBody.mass;
+
+		if (!fixed)
+			position = position.cpy().add(mtd.cpy().scl(im1 / (im1 + im2)));
+		if (!otherBody.fixed)
+			otherBody.position = otherBody.position.cpy().sub(mtd.cpy().scl(im2 / (im1 + im2)));
+
+		Vector2 v = velocity.cpy().sub(otherBody.velocity);
+		Vector2 mtdN = mtd.cpy();
+		mtdN = mtdN.nor();
+		float vn = v.cpy().dot(mtdN);
+
+		if (vn > 0.0f) {
+			return;
+		}
+
+		float i = (-(1.0f + elasticity) * vn) / (im1 + im2);
+		Vector2 impulse = mtdN.cpy().scl(i);
+
+		if (!fixed)
+			velocity = velocity.cpy().add(impulse.cpy().scl(im1));
+		if (!otherBody.fixed)
+			otherBody.velocity = otherBody.velocity.cpy().sub(impulse.cpy().scl(im2));
+	}
 	
 	@Override
 	public boolean equals(Object obj) {

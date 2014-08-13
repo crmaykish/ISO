@@ -1,6 +1,7 @@
 package maykish.colin.OrbitalSim;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
@@ -15,14 +16,13 @@ public class Simulation{
 	
 	// Settings
 	public boolean collide = true;
-	public boolean interbodyGravity = true;
-	public int G = 5;
-	public final float[] Gs = {0.0000001f, 0.000001f, 0.00001f, 0.0001f, 0.001f, 0.01f, 0.1f, 1.0f};
-	public float solarMass = 1000000f;
+	public boolean interbodyGravity = false;
+	public float G = 0.0001f;
+	public float solarMass = 10000000f;
 	
 	// Tool Settings
-	public int brushSize = 2;
-	public int bodyRadius = 8;
+	public int brushSize = 20;
+	public int bodyRadius = 4;
 	public int bodyMass = 1000;
 	
 	public Simulation(){
@@ -33,7 +33,7 @@ public class Simulation{
 		bodies = new ArrayList<Body>();
 		stars = new ArrayList<Body>();
 		
-		Body star = new Body(solarMass, 32, new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2), new Vector2(0,0.0f));
+		Body star = new Body(solarMass, 16, new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2), new Vector2(0,0.0f));
 		star.fixed = true;
 		bodies.add(star);
 		stars.add(star);
@@ -45,38 +45,20 @@ public class Simulation{
 	}
 	
 	private void updateGravity(){
-		// TODO : consolidate these two functions
-		if (interbodyGravity){
-			// Inter-body gravitation
-			for (int i = 0; i < bodies.size(); i++){
-				Body b = bodies.get(i);
-				for (int j = 0; j < bodies.size(); j++){
-					if (i != j){
-						Body other = bodies.get(j);
-						Vector2 radius = other.position.cpy().sub(b.position);
-						float accel = (Gs[G] * other.mass) / radius.len2();
-						Vector2 net = radius.nor().scl(accel);
-						b.velocity.add(net);
-					}
+		List<Body> compareList = interbodyGravity ? bodies : stars;
+		
+		for (int i = 0; i < bodies.size(); i++){
+			Body b = bodies.get(i);
+			for (int j = 0; j < compareList.size(); j++){
+				if (i != j){
+					Body other = compareList.get(j);
+					Vector2 radius = other.position.cpy().sub(b.position);
+					float accel = (G * other.mass) / radius.len2();
+					Vector2 net = radius.nor().scl(accel);
+					b.velocity.add(net);
 				}
-				b.position.add(b.velocity);
 			}
-		}
-		else {
-			// Bodies only attracted to stars
-			for (int i = 0; i < bodies.size(); i++){
-				Body b = bodies.get(i);
-				for (int j = 0; j < stars.size(); j++){
-					Body star = stars.get(j);
-					if (!b.equals(star)){
-						Vector2 radius = star.position.cpy().sub(b.position);
-						float accel = (Gs[G] * star.mass) / radius.len2();
-						Vector2 net = radius.nor().scl(accel);
-						b.velocity.add(net);
-					}
-				}
-				b.position.add(b.velocity);
-			}
+			b.position.add(b.velocity);
 		}
 	}
 	
@@ -88,9 +70,7 @@ public class Simulation{
 	            {
 	                if (bodies.get(i).checkCollision(bodies.get(j)))
 	                {
-	                    bodies.get(i).mass += bodies.get(j).mass;
-	                    bodies.remove(j);
-	                    //TODO: if mass has gone up enough, increase size
+	                	bodies.get(i).reactToCollision(bodies.get(j));
 	                }
 	            }
 	        }
@@ -119,7 +99,7 @@ public class Simulation{
 	private Vector2 calculateCircularOrbitVelocity(float x, float y, Body target){
 		Vector2 pos = new Vector2(x, y);
 		Vector2 radius = pos.cpy().sub(target.position);
-		float velocity_mag = (float) Math.sqrt((Gs[G] * target.mass) / radius.len());
+		float velocity_mag = (float) Math.sqrt((G * target.mass) / radius.len());
 		Vector2 unit = radius.cpy().nor();
 		Vector2 totalVel = unit.scl(velocity_mag);
 		Vector2 rotatedVelocity = new Vector2(totalVel.y, -totalVel.x);	// Initial velocity to put body into circular orbit
