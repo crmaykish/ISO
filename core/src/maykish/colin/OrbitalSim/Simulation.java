@@ -15,13 +15,13 @@ public class Simulation{
 	
 	// Settings
 	public boolean collide = true;
-	public boolean interbodyGravity = false;
+	public boolean interbodyGravity = true;
 	public int G = 5;
 	public final float[] Gs = {0.0000001f, 0.000001f, 0.00001f, 0.0001f, 0.001f, 0.01f, 0.1f, 1.0f};
 	public float solarMass = 1000000f;
 	
 	// Tool Settings
-	public int brushSize = 10;
+	public int brushSize = 2;
 	public int bodyRadius = 8;
 	public int bodyMass = 1000;
 	
@@ -33,7 +33,7 @@ public class Simulation{
 		bodies = new ArrayList<Body>();
 		stars = new ArrayList<Body>();
 		
-		Body star = new Body(solarMass, 128, new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2), new Vector2(0,0.0f));
+		Body star = new Body(solarMass, 32, new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2), new Vector2(0,0.0f));
 		star.fixed = true;
 		bodies.add(star);
 		stars.add(star);
@@ -88,7 +88,9 @@ public class Simulation{
 	            {
 	                if (bodies.get(i).checkCollision(bodies.get(j)))
 	                {
-	                    bodies.get(i).reactToCollision(bodies.get(j));
+	                    bodies.get(i).mass += bodies.get(j).mass;
+	                    bodies.remove(j);
+	                    //TODO: if mass has gone up enough, increase size
 	                }
 	            }
 	        }

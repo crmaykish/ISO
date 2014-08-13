@@ -20,15 +20,19 @@ Feature List:
 - [x] Simple Orbital Physics
 - [x] Simple Input - Create bodies and place them in circular orbit around the sun
 - [x] Collision detection and response between bodies
-- [x] Menu to toggle global options (collision, black hole sun, starting masses, etc)
+- [ ] Menu to toggle global options (collision, black hole sun, starting masses, etc)
 - [x] Inter-body gravity as togglable option (currently bodies are only effected by their parent body)
 - [ ] Cosmic tools - Planet canon, Debris generator, etc
-- [ ] Zoom
+- [x] Zoom
 - [ ] Live edit for existing bodies
 - [ ] More advanced collision response (shattering and fusing objects, material properties)
 
-Known Bugs:
-
-- Fixed Sun setting causes the sun to disappear completely
+New Goals:
+- [ ] Code cleanup and refactor
+- [ ] Basic physics optimization
+- [ ] Richocet vs. absorb for body interaction (material types?)
+- [ ] New body directional launch mechanic
+- [ ] Orbit trails
+- [ ] On screen tool panel
 
 ![Screenshot](/OrbitalSim-android/assets/screenshots/orbital simulator screenshot.jpg)
