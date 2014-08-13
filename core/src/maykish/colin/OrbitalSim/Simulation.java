@@ -16,14 +16,14 @@ public class Simulation{
 	
 	// Settings
 	public boolean collide = true;
-	public boolean interbodyGravity = false;
-	public float G = 0.0001f;
-	public float solarMass = 10000000f;
+	public boolean interbodyGravity = true;
+	public float G = 0.00001f;
+	public float solarMass = 100000000f;
 	
 	// Tool Settings
-	public int brushSize = 20;
-	public int bodyRadius = 4;
-	public int bodyMass = 1000;
+	public int brushSize = 30;
+	public int bodyRadius = 8;
+	public int bodyMass = 10000;
 	
 	public Simulation(){
 		setUpBodies();
@@ -33,7 +33,7 @@ public class Simulation{
 		bodies = new ArrayList<Body>();
 		stars = new ArrayList<Body>();
 		
-		Body star = new Body(solarMass, 16, new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2), new Vector2(0,0.0f));
+		Body star = new Body(solarMass, 32, new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2), new Vector2(0,0.0f));
 		star.fixed = true;
 		bodies.add(star);
 		stars.add(star);
@@ -45,21 +45,32 @@ public class Simulation{
 	}
 	
 	private void updateGravity(){
+		// Should we compare all the bodies with eachother or just the stars?
 		List<Body> compareList = interbodyGravity ? bodies : stars;
 		
-		for (int i = 0; i < bodies.size(); i++){
+		for (int i = 0; i < bodies.size(); i++) {
 			Body b = bodies.get(i);
-			for (int j = 0; j < compareList.size(); j++){
-				if (i != j){
-					Body other = compareList.get(j);
-					Vector2 radius = other.position.cpy().sub(b.position);
-					float accel = (G * other.mass) / radius.len2();
-					Vector2 net = radius.nor().scl(accel);
-					b.velocity.add(net);
+
+			for (int j = 0; j < compareList.size(); j++) {
+				if (interbodyGravity){
+					if (i != j){
+						incrementBodyVelocity(b, compareList.get(j));
+					}
+				}
+				else {
+					incrementBodyVelocity(b, compareList.get(j));
 				}
 			}
+
 			b.position.add(b.velocity);
 		}
+	}
+	
+	private void incrementBodyVelocity(Body body, Body other){
+		Vector2 radius = other.position.cpy().sub(body.position);
+		float accel = (G * other.mass) / radius.len2();
+		Vector2 net = radius.nor().scl(accel);
+		body.velocity.add(net);
 	}
 	
 	private void updateCollisions(){

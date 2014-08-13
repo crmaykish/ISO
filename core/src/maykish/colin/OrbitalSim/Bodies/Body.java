@@ -9,7 +9,7 @@ public class Body{
 	public Vector2 velocity;
 	public boolean fixed;
 	
-	protected float elasticity = 0.8f; // elasticity of collisions - 1.0 is completely elastic, 0.0 is completely inelastic, theoretically anyway
+	protected float elasticity = 1.0f; // elasticity of collisions - 1.0 is completely elastic, 0.0 is completely inelastic, theoretically anyway
 
 	public Body(float mass, int radius, Vector2 initPosition, Vector2 initVelocity) {
 		this.mass = mass;
@@ -39,7 +39,6 @@ public class Body{
 		float im1 = 1 / mass;
 		float im2 = 1 / otherBody.mass;
 
-		if (!fixed)
 			position = position.cpy().add(mtd.cpy().scl(im1 / (im1 + im2)));
 		if (!otherBody.fixed)
 			otherBody.position = otherBody.position.cpy().sub(mtd.cpy().scl(im2 / (im1 + im2)));
