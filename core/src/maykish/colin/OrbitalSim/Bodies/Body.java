@@ -3,10 +3,10 @@ package maykish.colin.OrbitalSim.Bodies;
 import com.badlogic.gdx.math.Vector2;
 
 public class Body{
-	public float mass;
-	public final int radius;
-	public Vector2 position;
-	public Vector2 velocity;
+	private float mass;
+	private int radius;
+	private Vector2 position;
+	private Vector2 velocity;
 	public boolean fixed;
 	
 	protected float elasticity = 1.0f; // elasticity of collisions - 1.0 is completely elastic, 0.0 is completely inelastic, theoretically anyway
@@ -75,5 +75,43 @@ public class Body{
 		return false;
 	}
 
+	public float getMass() {
+		return mass;
+	}
+
+	public void setMass(float mass) {
+		this.mass = mass;
+	}
+
+	public int getRadius() {
+		return radius;
+	}
+
+	public void setRadius(int radius) {
+		this.radius = radius;
+	}
+
+	public Vector2 getPosition() {
+		return position;
+	}
+
+	public void setPosition(Vector2 position) {
+		this.position = position;
+	}
+
+	public Vector2 getVelocity() {
+		return velocity;
+	}
+
+	public void setVelocity(Vector2 velocity) {
+		this.velocity = velocity;
+	}
+
+	public void incrementPositionByVelocity(){
+		position.add(velocity);
+	}
 	
+	public void incrementVelocity(Vector2 increment){
+		velocity.add(increment);
+	}
 }

@@ -51,9 +51,9 @@ public class Renderer {
 	
 	private void renderBodies(List<Body> bodies){
 		for (Body b : bodies){
-			int radius = b.radius;
+			int radius = b.getRadius();
 			TextureRegion tex = b instanceof Rocket ? rocket : ballTextures.get(radius);
-			batch.draw(tex, b.position.x - radius, b.position.y - radius);
+			batch.draw(tex, b.getPosition().x - radius, b.getPosition().y - radius);
 		}
 	}
 	

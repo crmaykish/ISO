@@ -16,13 +16,13 @@ public class Simulation{
 	
 	// Settings
 	public boolean collide = true;
-	public boolean interbodyGravity = true;
-	public float G = 0.00001f;
+	public boolean interbodyGravity = false;
+	public float G = 0.000001f;
 	public float solarMass = 100000000f;
 	
 	// Tool Settings
-	public int brushSize = 30;
-	public int bodyRadius = 8;
+	public int brushSize = 20;
+	public int bodyRadius = 4;
 	public int bodyMass = 10000;
 	
 	public Simulation(){
@@ -44,33 +44,25 @@ public class Simulation{
 		updateCollisions();
 	}
 	
-	private void updateGravity(){
+	private void updateGravity() {
 		// Should we compare all the bodies with eachother or just the stars?
 		List<Body> compareList = interbodyGravity ? bodies : stars;
-		
-		for (int i = 0; i < bodies.size(); i++) {
-			Body b = bodies.get(i);
 
+		for (int i = 0; i < bodies.size(); i++) {
 			for (int j = 0; j < compareList.size(); j++) {
-				if (interbodyGravity){
-					if (i != j){
-						incrementBodyVelocity(b, compareList.get(j));
-					}
-				}
-				else {
-					incrementBodyVelocity(b, compareList.get(j));
+				if (i != j) {	//TODO: i still think this is messed up for stars only
+					incrementBodyVelocity(bodies.get(i), compareList.get(j));
 				}
 			}
-
-			b.position.add(b.velocity);
+			bodies.get(i).incrementPositionByVelocity();
 		}
 	}
 	
 	private void incrementBodyVelocity(Body body, Body other){
-		Vector2 radius = other.position.cpy().sub(body.position);
-		float accel = (G * other.mass) / radius.len2();
+		Vector2 radius = other.getPosition().cpy().sub(body.getPosition());
+		float accel = (G * other.getMass()) / radius.len2();
 		Vector2 net = radius.nor().scl(accel);
-		body.velocity.add(net);
+		body.incrementVelocity(net);
 	}
 	
 	private void updateCollisions(){
@@ -109,8 +101,8 @@ public class Simulation{
 	
 	private Vector2 calculateCircularOrbitVelocity(float x, float y, Body target){
 		Vector2 pos = new Vector2(x, y);
-		Vector2 radius = pos.cpy().sub(target.position);
-		float velocity_mag = (float) Math.sqrt((G * target.mass) / radius.len());
+		Vector2 radius = pos.cpy().sub(target.getPosition());
+		float velocity_mag = (float) Math.sqrt((G * target.getMass()) / radius.len());
 		Vector2 unit = radius.cpy().nor();
 		Vector2 totalVel = unit.scl(velocity_mag);
 		Vector2 rotatedVelocity = new Vector2(totalVel.y, -totalVel.x);	// Initial velocity to put body into circular orbit
