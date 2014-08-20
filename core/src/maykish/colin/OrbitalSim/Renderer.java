@@ -6,6 +6,7 @@ import java.util.List;
 
 import maykish.colin.OrbitalSim.Bodies.Body;
 import maykish.colin.OrbitalSim.Bodies.Rocket;
+import maykish.colin.OrbitalSim.Utils.ColinsQueue;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -23,6 +24,7 @@ public class Renderer {
 	private HashMap<Integer, TextureRegion> ballTextures;
 	private TextureRegion background;
 	private TextureRegion rocket;
+	private TextureRegion trail;
 	private BitmapFont font;
 	private DecimalFormat decFormat;
 	
@@ -39,9 +41,22 @@ public class Renderer {
 		batch.begin();
 		
 		renderBackground();
+		renderTrails(sim.trails);
 		renderBodies(sim.bodies);
+		renderDebug();
 		
 		batch.end();
+	}
+	
+	private void renderTrails(ColinsQueue<Vector2> trails) {
+		for (Vector2 v : trails.getList()){
+			batch.draw(trail, v.x, v.y);
+		}
+	}
+
+	private void renderDebug(){
+		int fps = Gdx.graphics.getFramesPerSecond();
+		font.draw(batch, "FPS: " + fps, getTopLeftCorner().x + 2, getTopLeftCorner().y + 2);
 	}
 	
 	private void renderBackground(){
@@ -71,6 +86,10 @@ public class Renderer {
 		ballTextures.put(32, new TextureRegion(new Texture(Gdx.files.internal("ball64.png"))));
 		ballTextures.put(64, new TextureRegion(new Texture(Gdx.files.internal("ball128.png"))));
 		ballTextures.put(128, new TextureRegion(new Texture(Gdx.files.internal("ball256.png"))));
+		
+		trail = new TextureRegion(new Texture(Gdx.files.internal("trail.png")));
+		
+		trail.flip(false, true);
 		
 		rocket = new TextureRegion(new Texture(Gdx.files.internal("rocket.png")));
 		background = new TextureRegion(new Texture(Gdx.files.internal("starfield.png")));

@@ -1,12 +1,15 @@
 package maykish.colin.OrbitalSim;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
 import maykish.colin.OrbitalSim.Bodies.Body;
+import maykish.colin.OrbitalSim.Utils.ColinsQueue;
 
 public class Simulation{
 
@@ -14,16 +17,20 @@ public class Simulation{
 	public ArrayList<Body> bodies;
 	public ArrayList<Body> stars;
 	
+	public ColinsQueue<Vector2> trails;
+	
 	// Settings
 	public boolean collide = true;
-	public boolean interbodyGravity = false;
-	public float G = 0.000001f;
+	public boolean interbodyGravity = true;
+	public boolean showTrails = true;
+	public int maxTrails = 100000;
+	public float G = 0.00001f;
 	public float solarMass = 100000000f;
 	
 	// Tool Settings
-	public int brushSize = 20;
-	public int bodyRadius = 4;
-	public int bodyMass = 10000;
+	public int brushSize = 6;
+	public int bodyRadius = 8;
+	public int bodyMass = 100000;
 	
 	public Simulation(){
 		setUpBodies();
@@ -33,15 +40,33 @@ public class Simulation{
 		bodies = new ArrayList<Body>();
 		stars = new ArrayList<Body>();
 		
-		Body star = new Body(solarMass, 32, new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2), new Vector2(0,0.0f));
+		Body star = new Body(solarMass, 64, new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2), new Vector2(0,0.0f));
 		star.fixed = true;
 		bodies.add(star);
 		stars.add(star);
+		
+		trails = new ColinsQueue<Vector2>(maxTrails);
 	}
 	
 	public void update(){
 		updateGravity();
 		updateCollisions();
+		updateTrails();
+	}
+	
+	int frameGap = 5;
+	int currentFrame = 0;
+	
+	private void updateTrails() {
+		if (showTrails) {
+			if (currentFrame == frameGap) {
+				for (Body b : bodies) {
+					trails.add(b.getPosition().cpy());
+					currentFrame = 0;
+				}
+			}
+			currentFrame++;
+		}
 	}
 	
 	private void updateGravity() {
@@ -49,8 +74,10 @@ public class Simulation{
 		List<Body> compareList = interbodyGravity ? bodies : stars;
 
 		for (int i = 0; i < bodies.size(); i++) {
+			Body bodyI = bodies.get(i);
 			for (int j = 0; j < compareList.size(); j++) {
-				if (i != j) {	//TODO: i still think this is messed up for stars only
+				Body bodyJ = bodies.get(j);
+				if (!bodyI.equals(bodyJ)) {
 					incrementBodyVelocity(bodies.get(i), compareList.get(j));
 				}
 			}
