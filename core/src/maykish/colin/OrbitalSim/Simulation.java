@@ -20,8 +20,8 @@ public class Simulation{
 	public static boolean SHOW_TRAILS = true;
 	
 	// Physics Constants
-	public static final float G = 0.000001f;
-	public static final float SOLAR_MASS = 100000000f;
+	public static final float G = 0.0001f;
+	public static final float SOLAR_MASS = 10000000f;
 	
 	// Physics Bodies
 	public ArrayList<Body> bodies;
@@ -32,7 +32,7 @@ public class Simulation{
 	private int currentFrame = 0;
 	
 	// Tool Settings
-	public static int BRUSH_SIZE = 2;
+	public static int BRUSH_SIZE = 10;
 	public static int BODY_RADIUS = 8;
 	public static int BODY_MASS = 100000;
 	

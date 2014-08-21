@@ -5,8 +5,8 @@ import maykish.colin.OrbitalSim.Utils.MaxSizeList;
 import com.badlogic.gdx.math.Vector2;
 
 public class Body{
-	public static final int MAX_TRAIL_SIZE = 1000;	// How big a trail can get (max vector count)
-	public static final float ELASTICITY = 1.0f;	// Elasticity of collisions: 1.0 is completely elastic; 0.0 is completely inelastic
+	public static final int MAX_TRAIL_SIZE = 100;	// How big a trail can get (max vector count)
+	public static final float ELASTICITY = 0.9f;	// Elasticity of collisions: 1.0 is completely elastic; 0.0 is completely inelastic
 	
 	private float mass;
 	private int radius;
