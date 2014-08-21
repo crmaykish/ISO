@@ -35,4 +35,4 @@ New Goals:
 - [ ] Orbit trails
 - [ ] On screen tool panel
 
-![Screenshot](/OrbitalSim-android/assets/screenshots/orbital simulator screenshot.jpg)
+![Screenshot](/core/assets/screenshot.png)
