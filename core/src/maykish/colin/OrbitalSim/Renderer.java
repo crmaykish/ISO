@@ -1,30 +1,34 @@
 package maykish.colin.OrbitalSim;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import maykish.colin.OrbitalSim.Bodies.Body;
 import maykish.colin.OrbitalSim.Bodies.Rocket;
-import maykish.colin.OrbitalSim.Utils.ColinsQueue;
+import maykish.colin.OrbitalSim.Utils.MaxSizeList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 public class Renderer {
 	private SpriteBatch batch;
+	private ShapeRenderer shapeRenderer;
 	private OrthographicCamera camera;
 	
 	private HashMap<Integer, TextureRegion> ballTextures;
 	private TextureRegion background;
 	private TextureRegion rocket;
-	private TextureRegion trail;
 	private BitmapFont font;
 	private DecimalFormat decFormat;
 	
@@ -32,25 +36,39 @@ public class Renderer {
 		this.batch = batch;
 		this.camera = camera;
 		
+		shapeRenderer = new ShapeRenderer();
+		
 		loadTexturesAndFonts();
 	}
 	
 	public void render(Simulation sim){
 		
 		batch.setProjectionMatrix(camera.combined);
-		batch.begin();
+		shapeRenderer.setProjectionMatrix(camera.combined);
 		
+		batch.begin();
 		renderBackground();
-		renderTrails(sim.trails);
+		batch.end();
+		
+		shapeRenderer.setColor(Color.WHITE);
+		shapeRenderer.begin(ShapeType.Line);
+		renderTrails(sim.bodies);
+		shapeRenderer.end();
+		
+		batch.begin();
 		renderBodies(sim.bodies);
 		renderDebug();
-		
 		batch.end();
 	}
 	
-	private void renderTrails(ColinsQueue<Vector2> trails) {
-		for (Vector2 v : trails.getList()){
-			batch.draw(trail, v.x, v.y);
+	private void renderTrails(List<Body> bodies) {
+		for (Body b: bodies){
+			int trailsSize = b.trail.size();
+			if (trailsSize >= 2) {
+				for (int i = 0; i < trailsSize - 1; i++) {
+					shapeRenderer.line(b.trail.get(i), b.trail.get(i + 1));
+				}
+			}
 		}
 	}
 
@@ -86,10 +104,6 @@ public class Renderer {
 		ballTextures.put(32, new TextureRegion(new Texture(Gdx.files.internal("ball64.png"))));
 		ballTextures.put(64, new TextureRegion(new Texture(Gdx.files.internal("ball128.png"))));
 		ballTextures.put(128, new TextureRegion(new Texture(Gdx.files.internal("ball256.png"))));
-		
-		trail = new TextureRegion(new Texture(Gdx.files.internal("trail.png")));
-		
-		trail.flip(false, true);
 		
 		rocket = new TextureRegion(new Texture(Gdx.files.internal("rocket.png")));
 		background = new TextureRegion(new Texture(Gdx.files.internal("starfield.png")));

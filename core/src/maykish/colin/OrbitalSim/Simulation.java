@@ -1,36 +1,35 @@
 package maykish.colin.OrbitalSim;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
 import maykish.colin.OrbitalSim.Bodies.Body;
-import maykish.colin.OrbitalSim.Utils.ColinsQueue;
 
 public class Simulation{
-
+	// Toggles
+	public static boolean COLLIDE = true;
+	public static boolean INTERBODY_GRAVITY = true;
+	public static boolean SHOW_TRAILS = true;
+	
+	// Physics Constants
+	public static final float G = 0.00001f;
+	public static final float SOLAR_MASS = 100000000f;
+	
 	// Physics Bodies
 	public ArrayList<Body> bodies;
 	public ArrayList<Body> stars;
 	
-	public ColinsQueue<Vector2> trails;
-	
-	// Settings
-	public boolean collide = true;
-	public boolean interbodyGravity = true;
-	public boolean showTrails = true;
-	public int maxTrails = 100000;
-	public float G = 0.00001f;
-	public float solarMass = 100000000f;
+	// Trail Frame Gap
+	private final int FRAME_GAP = 5;
+	private int currentFrame = 0;
 	
 	// Tool Settings
-	public int brushSize = 6;
-	public int bodyRadius = 8;
-	public int bodyMass = 100000;
+	public static int BRUSH_SIZE = 6;
+	public static int BODY_RADIUS = 4;
+	public static int BODY_MASS = 100000;
 	
 	public Simulation(){
 		setUpBodies();
@@ -40,12 +39,11 @@ public class Simulation{
 		bodies = new ArrayList<Body>();
 		stars = new ArrayList<Body>();
 		
-		Body star = new Body(solarMass, 64, new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2), new Vector2(0,0.0f));
+		Body star = new Body(SOLAR_MASS, 64, new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2), new Vector2(0,0.0f));
 		star.fixed = true;
 		bodies.add(star);
 		stars.add(star);
 		
-		trails = new ColinsQueue<Vector2>(maxTrails);
 	}
 	
 	public void update(){
@@ -54,14 +52,11 @@ public class Simulation{
 		updateTrails();
 	}
 	
-	int frameGap = 5;
-	int currentFrame = 0;
-	
 	private void updateTrails() {
-		if (showTrails) {
-			if (currentFrame == frameGap) {
+		if (SHOW_TRAILS) {
+			if (currentFrame == FRAME_GAP) {
 				for (Body b : bodies) {
-					trails.add(b.getPosition().cpy());
+					b.trail.add(b.getPosition().cpy());
 					currentFrame = 0;
 				}
 			}
@@ -71,7 +66,7 @@ public class Simulation{
 	
 	private void updateGravity() {
 		// Should we compare all the bodies with eachother or just the stars?
-		List<Body> compareList = interbodyGravity ? bodies : stars;
+		List<Body> compareList = INTERBODY_GRAVITY ? bodies : stars;
 
 		for (int i = 0; i < bodies.size(); i++) {
 			Body bodyI = bodies.get(i);
@@ -93,7 +88,7 @@ public class Simulation{
 	}
 	
 	private void updateCollisions(){
-		if (collide){
+		if (COLLIDE){
 			for (int i = 0; i < bodies.size(); i++)
 	        {
 	            for (int j = i + 1; j < bodies.size(); j++)
@@ -116,11 +111,11 @@ public class Simulation{
 	}
 
 	private void createCircle(Vector2 center, Vector2 velocity){
-		for (int i = -brushSize / 2; i < brushSize / 2; i++){
-			for (int j = -brushSize / 2; j < brushSize / 2; j++){
-				if (new Vector2(i, j).dst(0, 0) < brushSize / 2){
-					Vector2 pos = new Vector2(center.x + 2*i*bodyRadius, center.y + 2*j*bodyRadius);
-					bodies.add(new Body(bodyMass, bodyRadius, pos, velocity.cpy()));
+		for (int i = -BRUSH_SIZE / 2; i < BRUSH_SIZE / 2; i++){
+			for (int j = -BRUSH_SIZE / 2; j < BRUSH_SIZE / 2; j++){
+				if (new Vector2(i, j).dst(0, 0) < BRUSH_SIZE / 2){
+					Vector2 pos = new Vector2(center.x + 2*i*BODY_RADIUS, center.y + 2*j*BODY_RADIUS);
+					bodies.add(new Body(BODY_MASS, BODY_RADIUS, pos, velocity.cpy()));
 				}
 			}
 		}

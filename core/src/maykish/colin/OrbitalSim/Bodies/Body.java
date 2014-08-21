@@ -1,15 +1,20 @@
 package maykish.colin.OrbitalSim.Bodies;
 
+import maykish.colin.OrbitalSim.Utils.MaxSizeList;
+
 import com.badlogic.gdx.math.Vector2;
 
 public class Body{
+	public static final int MAX_TRAIL_SIZE = 100;	// How big a trail can get (max vector count)
+	public static final float ELASTICITY = 1.0f;	// Elasticity of collisions: 1.0 is completely elastic; 0.0 is completely inelastic
+	
 	private float mass;
 	private int radius;
 	private Vector2 position;
 	private Vector2 velocity;
 	public boolean fixed;
 	
-	protected float elasticity = 1.0f; // elasticity of collisions - 1.0 is completely elastic, 0.0 is completely inelastic, theoretically anyway
+	public MaxSizeList<Vector2> trail;
 
 	public Body(float mass, int radius, Vector2 initPosition, Vector2 initVelocity) {
 		this.mass = mass;
@@ -17,6 +22,7 @@ public class Body{
 		this.position = initPosition;
 		this.velocity = initVelocity;
 		this.fixed = false;
+		this.trail = new MaxSizeList<Vector2>(MAX_TRAIL_SIZE);
 	}
 	
 	public boolean checkCollision(Body otherBody){
@@ -52,7 +58,7 @@ public class Body{
 			return;
 		}
 
-		float i = (-(1.0f + elasticity) * vn) / (im1 + im2);
+		float i = (-(1.0f + ELASTICITY) * vn) / (im1 + im2);
 		Vector2 impulse = mtdN.cpy().scl(i);
 
 		if (!fixed)
