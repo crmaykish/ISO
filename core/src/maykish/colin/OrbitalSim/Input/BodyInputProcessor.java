@@ -7,12 +7,12 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 
-public class SimInputProcessor implements InputProcessor{
+public class BodyInputProcessor implements InputProcessor{
 
 	Simulation sim;
 	OrthographicCamera camera;
 	
-	public SimInputProcessor(Simulation sim, OrthographicCamera camera) {
+	public BodyInputProcessor(Simulation sim, OrthographicCamera camera) {
 		this.sim = sim;
 		this.camera = camera;
 	}

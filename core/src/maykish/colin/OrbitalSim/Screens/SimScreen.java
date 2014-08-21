@@ -5,7 +5,8 @@ import maykish.colin.OrbitalSim.OrbitalSim;
 import maykish.colin.OrbitalSim.Renderer;
 import maykish.colin.OrbitalSim.Simulation;
 import maykish.colin.OrbitalSim.Input.CameraInputProcessor;
-import maykish.colin.OrbitalSim.Input.SimInputProcessor;
+import maykish.colin.OrbitalSim.Input.BodyInputProcessor;
+import maykish.colin.OrbitalSim.Input.ToolInputProcessor;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -33,8 +34,9 @@ public class SimScreen extends AbstractScreen{
 		renderer = new Renderer(batch, camera);
 		
 		InputMultiplexer multiplexer = new InputMultiplexer();
+		multiplexer.addProcessor(new ToolInputProcessor(sim, renderer, camera));
 		multiplexer.addProcessor(new CameraInputProcessor(camera));
-		multiplexer.addProcessor(new SimInputProcessor(sim, camera));
+		multiplexer.addProcessor(new BodyInputProcessor(sim, camera));
 		Gdx.input.setInputProcessor(multiplexer);
 	}
 
