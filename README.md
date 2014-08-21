@@ -23,16 +23,16 @@ Feature List:
 - [ ] Menu to toggle global options (collision, black hole sun, starting masses, etc)
 - [x] Inter-body gravity as togglable option (currently bodies are only effected by their parent body)
 - [ ] Cosmic tools - Planet canon, Debris generator, etc
-- [x] Zoom
+- [x] Zoom (this is gross)
 - [ ] Live edit for existing bodies
 - [ ] More advanced collision response (shattering and fusing objects, material properties)
 
 New Goals:
-- [ ] Code cleanup and refactor
-- [ ] Basic physics optimization
+- [x] Code cleanup and refactor
+- [x] Basic physics optimization
 - [ ] Richocet vs. absorb for body interaction (material types?)
-- [ ] New body directional launch mechanic
-- [ ] Orbit trails
-- [ ] On screen tool panel
+- [x] New body directional launch mechanic
+- [x] Orbit trails
+- [x] On screen tool panel
 
 ![Screenshot](/core/assets/screenshot.png)
