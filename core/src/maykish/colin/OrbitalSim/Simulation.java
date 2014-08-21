@@ -9,13 +9,18 @@ import com.badlogic.gdx.math.Vector2;
 import maykish.colin.OrbitalSim.Bodies.Body;
 
 public class Simulation{
+	
+	// TODO: store this in the UI class too
+	public boolean launch = false;
+	
+	
 	// Toggles
 	public static boolean COLLIDE = true;
 	public static boolean INTERBODY_GRAVITY = true;
 	public static boolean SHOW_TRAILS = true;
 	
 	// Physics Constants
-	public static final float G = 0.00001f;
+	public static final float G = 0.0001f;
 	public static final float SOLAR_MASS = 100000000f;
 	
 	// Physics Bodies
@@ -44,6 +49,14 @@ public class Simulation{
 		bodies.add(star);
 		stars.add(star);
 		
+	}
+	
+	public void addBody(Vector2 pos, Vector2 vel){
+		bodies.add(new Body(BODY_MASS, BODY_RADIUS, pos, vel));
+	}
+	
+	public Vector2 getLaunchVelocity(Vector2 start, Vector2 end){
+		return (end.cpy().sub(start)).scl(0.02f);
 	}
 	
 	public void update(){

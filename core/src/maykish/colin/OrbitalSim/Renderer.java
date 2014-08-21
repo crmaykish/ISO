@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
@@ -29,8 +30,15 @@ public class Renderer {
 	private HashMap<Integer, TextureRegion> ballTextures;
 	private TextureRegion background;
 	private TextureRegion rocket;
+	private TextureRegion button;
 	private BitmapFont font;
 	private DecimalFormat decFormat;
+	
+	public Rectangle buttonRect;
+	
+	
+	public Vector2 start;
+	public Vector2 end;
 	
 	public Renderer(SpriteBatch batch, OrthographicCamera camera){
 		this.batch = batch;
@@ -39,6 +47,11 @@ public class Renderer {
 		shapeRenderer = new ShapeRenderer();
 		
 		loadTexturesAndFonts();
+		
+		buttonRect = new Rectangle(getTopLeftCorner().x, Gdx.graphics.getHeight() - 64, 64, 64);
+		
+		start = new Vector2();
+		end = new Vector2();
 	}
 	
 	public void render(Simulation sim){
@@ -53,14 +66,29 @@ public class Renderer {
 		shapeRenderer.setColor(Color.WHITE);
 		shapeRenderer.begin(ShapeType.Line);
 		renderTrails(sim.bodies);
+		renderLaunch();
 		shapeRenderer.end();
 		
 		batch.begin();
 		renderBodies(sim.bodies);
-		renderDebug();
+		renderDebug(sim);
+		renderButtons();
 		batch.end();
 	}
 	
+	private void renderLaunch() {
+		shapeRenderer.line(start, end);
+		
+	}
+
+	private void renderButtons() {
+		
+		buttonRect.x = getTopLeftCorner().x;
+		buttonRect.y = getTopLeftCorner().y + Gdx.graphics.getHeight()-64;
+		batch.draw(button, buttonRect.x, buttonRect.y);
+		
+	}
+
 	private void renderTrails(List<Body> bodies) {
 		for (Body b: bodies){
 			int trailsSize = b.trail.size();
@@ -72,9 +100,11 @@ public class Renderer {
 		}
 	}
 
-	private void renderDebug(){
+	private void renderDebug(Simulation sim){
 		int fps = Gdx.graphics.getFramesPerSecond();
 		font.draw(batch, "FPS: " + fps, getTopLeftCorner().x + 2, getTopLeftCorner().y + 2);
+		font.draw(batch, "Bodies: " + sim.bodies.size(), getTopLeftCorner().x + 2 , getTopLeftCorner().y + 14);
+		font.draw(batch, "Launch: " + sim.launch, getTopLeftCorner().x + 2 , getTopLeftCorner().y + 26);
 	}
 	
 	private void renderBackground(){
@@ -90,7 +120,7 @@ public class Renderer {
 		}
 	}
 	
-	private Vector2 getTopLeftCorner(){
+	public Vector2 getTopLeftCorner(){
 		Vector3 corner = new Vector3(0,0,0);
 		camera.unproject(corner);
 		return new Vector2(corner.x, corner.y);
@@ -107,9 +137,11 @@ public class Renderer {
 		
 		rocket = new TextureRegion(new Texture(Gdx.files.internal("rocket.png")));
 		background = new TextureRegion(new Texture(Gdx.files.internal("starfield.png")));
+		button = new TextureRegion(new Texture(Gdx.files.internal("button.png")));
 		
 		rocket.flip(false, true);
 		background.flip(false, true);
+		button.flip(false, true);
 		
 		font = new BitmapFont();
 		font.setScale(1, -1);
