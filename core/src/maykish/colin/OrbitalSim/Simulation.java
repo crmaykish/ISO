@@ -27,8 +27,8 @@ public class Simulation{
 	private int currentFrame = 0;
 	
 	// Tool Settings
-	public static int BRUSH_SIZE = 6;
-	public static int BODY_RADIUS = 4;
+	public static int BRUSH_SIZE = 2;
+	public static int BODY_RADIUS = 16;
 	public static int BODY_MASS = 100000;
 	
 	public Simulation(){

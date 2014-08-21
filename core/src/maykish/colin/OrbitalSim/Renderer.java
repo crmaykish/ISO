@@ -99,10 +99,10 @@ public class Renderer {
 	private void loadTexturesAndFonts(){
 		ballTextures = new HashMap<Integer, TextureRegion>();
 		ballTextures.put(4, new TextureRegion(new Texture(Gdx.files.internal("ball8.png"))));
-		ballTextures.put(8, new TextureRegion(new Texture(Gdx.files.internal("ball16.png"))));
-		ballTextures.put(16, new TextureRegion(new Texture(Gdx.files.internal("ball32.png"))));
-		ballTextures.put(32, new TextureRegion(new Texture(Gdx.files.internal("ball64.png"))));
-		ballTextures.put(64, new TextureRegion(new Texture(Gdx.files.internal("ball128.png"))));
+		ballTextures.put(8, new TextureRegion(new Texture(Gdx.files.internal("pPlanet16.png"))));
+		ballTextures.put(16, new TextureRegion(new Texture(Gdx.files.internal("pPLanet32.png"))));
+		ballTextures.put(32, new TextureRegion(new Texture(Gdx.files.internal("pPlanet64.png"))));
+		ballTextures.put(64, new TextureRegion(new Texture(Gdx.files.internal("pPlanet128.png"))));
 		ballTextures.put(128, new TextureRegion(new Texture(Gdx.files.internal("ball256.png"))));
 		
 		rocket = new TextureRegion(new Texture(Gdx.files.internal("rocket.png")));
