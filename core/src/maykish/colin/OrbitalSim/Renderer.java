@@ -35,6 +35,7 @@ public class Renderer {
 	private DecimalFormat decFormat;
 	
 	public Rectangle buttonRect;
+	public Rectangle sizeRect;
 	
 	
 	public Vector2 start;
@@ -49,6 +50,7 @@ public class Renderer {
 		loadTexturesAndFonts();
 		
 		buttonRect = new Rectangle(getTopLeftCorner().x, Gdx.graphics.getHeight() - 64, 64, 64);
+		sizeRect = new Rectangle(getTopLeftCorner().x + 64, Gdx.graphics.getHeight() - 64, 64, 64);
 		
 		start = new Vector2();
 		end = new Vector2();
@@ -85,7 +87,10 @@ public class Renderer {
 		
 		buttonRect.x = getTopLeftCorner().x;
 		buttonRect.y = getTopLeftCorner().y + Gdx.graphics.getHeight()-64;
+		sizeRect.x = getTopLeftCorner().x + 64;
+		sizeRect.y = getTopLeftCorner().y + Gdx.graphics.getHeight()-64;
 		batch.draw(button, buttonRect.x, buttonRect.y);
+		batch.draw(button, sizeRect.x, sizeRect.y);
 		
 	}
 
@@ -105,6 +110,7 @@ public class Renderer {
 		font.draw(batch, "FPS: " + fps, getTopLeftCorner().x + 2, getTopLeftCorner().y + 2);
 		font.draw(batch, "Bodies: " + sim.bodies.size(), getTopLeftCorner().x + 2 , getTopLeftCorner().y + 14);
 		font.draw(batch, "Launch: " + sim.launch, getTopLeftCorner().x + 2 , getTopLeftCorner().y + 26);
+		font.draw(batch, "Planet Size: " + Simulation.BODY_RADIUS*2, getTopLeftCorner().x + 2 , getTopLeftCorner().y + 38);
 	}
 	
 	private void renderBackground(){

@@ -61,6 +61,11 @@ public class ToolInputProcessor implements InputProcessor{
 		Vector3 touch = new Vector3(screenX, screenY, 0);
 		camera.unproject(touch);
 		
+		if (renderer.sizeRect.contains(touch.x, touch.y)) {
+			Simulation.BODY_RADIUS = Simulation.BODY_RADIUS == 64 ? 8 : Simulation.BODY_RADIUS * 2;
+			return true;
+		}
+		
 		if (renderer.buttonRect.contains(touch.x, touch.y)) {
 			Gdx.app.log("click", "click");
 			
