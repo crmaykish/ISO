@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
 
 import maykish.colin.OrbitalSim.Bodies.Body;
@@ -16,7 +17,7 @@ public class Simulation{
 	
 	// Toggles
 	public static boolean COLLIDE = true;
-	public static boolean INTERBODY_GRAVITY = true;
+	public static boolean INTERBODY_GRAVITY = false;
 	public static boolean SHOW_TRAILS = true;
 	
 	// Physics Constants
@@ -34,7 +35,7 @@ public class Simulation{
 	// Tool Settings
 	public static int BRUSH_SIZE = 10;
 	public static int BODY_RADIUS = 8;
-	public static int BODY_MASS = 100000;
+	public static int BODY_MASS = 10000;
 	
 	public Simulation(){
 		setUpBodies();
@@ -60,6 +61,11 @@ public class Simulation{
 	}
 	
 	public void update(){
+		
+		if(Gdx.input.isKeyPressed(Keys.ESCAPE)){
+			Gdx.app.exit();
+		}
+		
 		updateGravity();
 		updateCollisions();
 		updateTrails();
@@ -143,5 +149,13 @@ public class Simulation{
 		Vector2 rotatedVelocity = new Vector2(totalVel.y, -totalVel.x);	// Initial velocity to put body into circular orbit
 		return rotatedVelocity;
 	}	
+	
+	// tools and effects to be called by the UI
+	public void toggleTrails(){
+		SHOW_TRAILS = !SHOW_TRAILS;
+		for (Body b : bodies){
+			b.trail.clear();
+		}
+	}
 	
 }

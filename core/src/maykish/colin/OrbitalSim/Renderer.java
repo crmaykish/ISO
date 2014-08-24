@@ -7,6 +7,8 @@ import java.util.List;
 
 import maykish.colin.OrbitalSim.Bodies.Body;
 import maykish.colin.OrbitalSim.Bodies.Rocket;
+import maykish.colin.OrbitalSim.Interface.UserInterface;
+import maykish.colin.OrbitalSim.Interface.Buttons.Button;
 import maykish.colin.OrbitalSim.Utils.MaxSizeList;
 
 import com.badlogic.gdx.Gdx;
@@ -21,6 +23,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class Renderer {
 	private SpriteBatch batch;
@@ -31,15 +35,13 @@ public class Renderer {
 	private TextureRegion background;
 	private TextureRegion rocket;
 	private TextureRegion button;
+	private TextureRegion buttonClicked;
 	private BitmapFont font;
 	private DecimalFormat decFormat;
 	
-	public Rectangle buttonRect;
-	public Rectangle sizeRect;
-	
-	
 	public Vector2 start;
 	public Vector2 end;
+	
 	
 	public Renderer(SpriteBatch batch, OrthographicCamera camera){
 		this.batch = batch;
@@ -49,15 +51,12 @@ public class Renderer {
 		
 		loadTexturesAndFonts();
 		
-		buttonRect = new Rectangle(getTopLeftCorner().x, Gdx.graphics.getHeight() - 64, 64, 64);
-		sizeRect = new Rectangle(getTopLeftCorner().x + 64, Gdx.graphics.getHeight() - 64, 64, 64);
-		
 		start = new Vector2();
 		end = new Vector2();
+		
 	}
 	
-	public void render(Simulation sim){
-		
+	public void render(Simulation sim, UserInterface ui){
 		batch.setProjectionMatrix(camera.combined);
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		
@@ -73,8 +72,9 @@ public class Renderer {
 		
 		batch.begin();
 		renderBodies(sim.bodies);
-		renderDebug(sim);
-		renderButtons();
+		
+		renderButtons(ui.getButtons());
+		
 		batch.end();
 	}
 	
@@ -83,14 +83,13 @@ public class Renderer {
 		
 	}
 
-	private void renderButtons() {
+	private void renderButtons(List<Button> buttons) {
 		
-		buttonRect.x = getTopLeftCorner().x;
-		buttonRect.y = getTopLeftCorner().y + Gdx.graphics.getHeight()-64;
-		sizeRect.x = getTopLeftCorner().x + 64;
-		sizeRect.y = getTopLeftCorner().y + Gdx.graphics.getHeight()-64;
-		batch.draw(button, buttonRect.x, buttonRect.y);
-		batch.draw(button, sizeRect.x, sizeRect.y);
+		for (Button b : buttons){
+			Vector2 realPos = getTopLeftCorner().cpy().add(b.getX(), b.getY());
+			batch.draw((b.isClicked() ? buttonClicked : button), realPos.x, realPos.y);
+			font.draw(batch, b.getText(), realPos.x + 2, realPos.y + 26);
+		}
 		
 	}
 
@@ -105,14 +104,6 @@ public class Renderer {
 		}
 	}
 
-	private void renderDebug(Simulation sim){
-		int fps = Gdx.graphics.getFramesPerSecond();
-		font.draw(batch, "FPS: " + fps, getTopLeftCorner().x + 2, getTopLeftCorner().y + 2);
-		font.draw(batch, "Bodies: " + sim.bodies.size(), getTopLeftCorner().x + 2 , getTopLeftCorner().y + 14);
-		font.draw(batch, "Launch: " + sim.launch, getTopLeftCorner().x + 2 , getTopLeftCorner().y + 26);
-		font.draw(batch, "Planet Size: " + Simulation.BODY_RADIUS*2, getTopLeftCorner().x + 2 , getTopLeftCorner().y + 38);
-	}
-	
 	private void renderBackground(){
 		Vector2 topLeftCorner = getTopLeftCorner();
 		batch.draw(background, topLeftCorner.x, topLeftCorner.y, 0, 0, background.getRegionWidth(), background.getRegionHeight(), camera.zoom, camera.zoom, 0);
@@ -121,8 +112,7 @@ public class Renderer {
 	private void renderBodies(List<Body> bodies){
 		for (Body b : bodies){
 			int radius = b.getRadius();
-			TextureRegion tex = b instanceof Rocket ? rocket : ballTextures.get(radius);
-			batch.draw(tex, b.getPosition().x - radius, b.getPosition().y - radius);
+			batch.draw(ballTextures.get(radius), b.getPosition().x - radius, b.getPosition().y - radius);
 		}
 	}
 	
@@ -141,13 +131,16 @@ public class Renderer {
 		ballTextures.put(64, new TextureRegion(new Texture(Gdx.files.internal("pPlanet128.png"))));
 		ballTextures.put(128, new TextureRegion(new Texture(Gdx.files.internal("ball256.png"))));
 		
-		rocket = new TextureRegion(new Texture(Gdx.files.internal("rocket.png")));
+//		rocket = new TextureRegion(new Texture(Gdx.files.internal("rocket.png")));
 		background = new TextureRegion(new Texture(Gdx.files.internal("starfield.png")));
-		button = new TextureRegion(new Texture(Gdx.files.internal("button.png")));
 		
-		rocket.flip(false, true);
+		button = new TextureRegion(new Texture(Gdx.files.internal("button.png")));
+		buttonClicked = new TextureRegion(new Texture(Gdx.files.internal("button-clicked.png")));
+		
+//		rocket.flip(false, true);
 		background.flip(false, true);
 		button.flip(false, true);
+		buttonClicked.flip(false, true);
 		
 		font = new BitmapFont();
 		font.setScale(1, -1);
