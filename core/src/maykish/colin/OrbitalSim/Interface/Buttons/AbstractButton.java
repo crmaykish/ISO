@@ -1,5 +1,7 @@
 package maykish.colin.OrbitalSim.Interface.Buttons;
 
+import com.badlogic.gdx.math.Rectangle;
+
 public abstract class AbstractButton implements Clickable {
 	private boolean clicked;
 
@@ -23,6 +25,11 @@ public abstract class AbstractButton implements Clickable {
 	@Override
 	public float getHeight() {
 		return 64;
+	}
+	
+	@Override
+	public Rectangle getRectangle() {
+		return new Rectangle(getX(), getY(), getWidth(), getHeight());
 	}
 
 }

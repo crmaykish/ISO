@@ -6,6 +6,7 @@ import java.util.List;
 import maykish.colin.OrbitalSim.Simulation;
 import maykish.colin.OrbitalSim.Interface.Buttons.AbstractButton;
 import maykish.colin.OrbitalSim.Interface.Buttons.Clickable;
+import maykish.colin.OrbitalSim.Interface.Buttons.ResetSimulationButton;
 import maykish.colin.OrbitalSim.Interface.Buttons.ToggleCollisionsButton;
 import maykish.colin.OrbitalSim.Interface.Buttons.ToggleInterbodyGravityButton;
 import maykish.colin.OrbitalSim.Interface.Buttons.ToggleTrailsButton;
@@ -34,6 +35,7 @@ public class UserInterface {
 		buttons.add(new ToggleTrailsButton());
 		buttons.add(new ToggleCollisionsButton());
 		buttons.add(new ToggleInterbodyGravityButton());
+		buttons.add(new ResetSimulationButton());
 
 	}
 
@@ -45,8 +47,7 @@ public class UserInterface {
 	// otherwise, false
 	public boolean buttonClickUp(float x, float y){
 		for (Clickable b : buttons){
-			Rectangle rect = new Rectangle(b.getX(), b.getY(), 128, 64);
-			if (rect.contains(x, y)){
+			if (b.getRectangle().contains(x, y)){
 				b.effect(sim);
 				b.setClicked(false);
 				return true;
@@ -57,8 +58,7 @@ public class UserInterface {
 	
 	public boolean buttonClickDown(float x, float y){
 		for (Clickable b : buttons){
-			Rectangle rect = new Rectangle(b.getX(), b.getY(), 128, 64);
-			if (rect.contains(x, y)){
+			if (b.getRectangle().contains(x, y)){
 				b.setClicked(true);
 				return true;
 			}

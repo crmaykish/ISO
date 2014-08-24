@@ -22,7 +22,7 @@ public class Simulation{
 	
 	// Physics Constants
 	public static final float G = 0.0001f;
-	public static final float SOLAR_MASS = 10000000f;
+	public static final float SOLAR_MASS = 100000000f;
 	
 	// Physics Bodies
 	public ArrayList<Body> bodies;
@@ -38,18 +38,10 @@ public class Simulation{
 	public static int BODY_MASS = 10000;
 	
 	public Simulation(){
-		setUpBodies();
-	}
-	
-	private void setUpBodies(){
 		bodies = new ArrayList<Body>();
 		stars = new ArrayList<Body>();
 		
-		Body star = new Body(SOLAR_MASS, 64, new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2), new Vector2(0,0.0f));
-		star.fixed = true;
-		bodies.add(star);
-		stars.add(star);
-		
+		reset();
 	}
 	
 	public void addBody(Vector2 pos, Vector2 vel){
@@ -158,4 +150,13 @@ public class Simulation{
 		}
 	}
 	
+	public void reset(){
+		bodies.clear();
+		stars.clear();
+		
+		Body star = new Body(SOLAR_MASS, 64, new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2), new Vector2(0,0.0f));
+		star.fixed = true;
+		bodies.add(star);
+		stars.add(star);
+	}
 }
