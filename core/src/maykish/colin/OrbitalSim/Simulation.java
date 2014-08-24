@@ -19,11 +19,11 @@ public class Simulation{
 	
 	// Toggles
 	public static CollisionState COLLISIONS = CollisionState.RICOCHET;
-	public static boolean INTERBODY_GRAVITY = false;
+	public static boolean INTERBODY_GRAVITY = true;
 	public static boolean SHOW_TRAILS = true;
 	
 	// Physics Constants
-	public static final float G = 0.00001f;
+	public static final float G = 0.000001f;
 	
 	// Physics Bodies
 	public ArrayList<Body> bodies;
@@ -181,7 +181,7 @@ public class Simulation{
 		bodies.clear();
 		stars.clear();
 		
-		Body star = new Body(bodyMass(64), 64, new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2), new Vector2(0,0.0f));
+		Body star = new Body(bodyMass(256), 64, new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2), new Vector2(0,0.0f));
 		star.fixed = true;
 		bodies.add(star);
 		stars.add(star);
