@@ -33,7 +33,7 @@ public class SimScreen extends AbstractScreen{
 		camera.setToOrtho(true, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		
 		sim = new Simulation();
-		ui = new UserInterface(sim);
+		ui = new UserInterface(sim, camera);
 		renderer = new Renderer(batch, camera);
 		
 		InputMultiplexer multiplexer = new InputMultiplexer();

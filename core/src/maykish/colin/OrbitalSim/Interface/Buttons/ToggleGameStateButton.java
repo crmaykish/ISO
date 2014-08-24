@@ -2,20 +2,20 @@ package maykish.colin.OrbitalSim.Interface.Buttons;
 
 import maykish.colin.OrbitalSim.Simulation;
 
-public class ToggleTrailsButton extends AbstractButton {
-	
-	public ToggleTrailsButton(float x, float y) {
+public class ToggleGameStateButton extends AbstractButton {
+
+	public ToggleGameStateButton(float x, float y) {
 		super(x, y);
 	}
 
 	@Override
 	public void effect(Simulation sim) {
-		sim.toggleTrails();
+		Simulation.RUNNING = !Simulation.RUNNING;
 	}
 
 	@Override
 	public String getText() {
-		return "Trails: " + (Simulation.SHOW_TRAILS ? "On" : "Off");
+		return Simulation.RUNNING ? "Pause" : "Resume";
 	}
 
 }

@@ -10,9 +10,9 @@ public class DesktopLauncher {
 		
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "Orbit Sim";
-		config.width = 1920;
-		config.height = 1080;
-		config.fullscreen = true;
+		config.width = 1280;
+		config.height = 800;
+		config.fullscreen = false;
 		
 		new LwjglApplication(new OrbitalSim(), config);
 	}

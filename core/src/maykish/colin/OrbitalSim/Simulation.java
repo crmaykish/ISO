@@ -14,15 +14,16 @@ public class Simulation{
 	// TODO: store this in the UI class too
 	public boolean launch = false;
 	
+	// Game State
+	public static boolean RUNNING = true;
 	
 	// Toggles
-	public static boolean COLLIDE = true;
+	public static CollisionState COLLISIONS = CollisionState.RICOCHET;
 	public static boolean INTERBODY_GRAVITY = false;
 	public static boolean SHOW_TRAILS = true;
 	
 	// Physics Constants
-	public static final float G = 0.0001f;
-	public static final float SOLAR_MASS = 100000000f;
+	public static final float G = 0.00001f;
 	
 	// Physics Bodies
 	public ArrayList<Body> bodies;
@@ -33,9 +34,10 @@ public class Simulation{
 	private int currentFrame = 0;
 	
 	// Tool Settings
-	public static int BRUSH_SIZE = 10;
+	public static int BRUSH_SIZE = 0;
+	public static int BRUSH_SIZES[] = { 2, 6, 11, 16, 21, 26, 31 };
 	public static int BODY_RADIUS = 8;
-	public static int BODY_MASS = 10000;
+//	public static int BODY_MASS = 10000;
 	
 	public Simulation(){
 		bodies = new ArrayList<Body>();
@@ -44,8 +46,12 @@ public class Simulation{
 		reset();
 	}
 	
+	private int bodyMass(int radius){
+		return (int) (Math.pow(radius, 3) * 1000);
+	}
+	
 	public void addBody(Vector2 pos, Vector2 vel){
-		bodies.add(new Body(BODY_MASS, BODY_RADIUS, pos, vel));
+		bodies.add(new Body(bodyMass(BODY_RADIUS), BODY_RADIUS, pos, vel));
 	}
 	
 	public Vector2 getLaunchVelocity(Vector2 start, Vector2 end){
@@ -58,9 +64,11 @@ public class Simulation{
 			Gdx.app.exit();
 		}
 		
-		updateGravity();
-		updateCollisions();
-		updateTrails();
+		if (RUNNING){
+			updateGravity();
+			updateCollisions();
+			updateTrails();
+		}
 	}
 	
 	private void updateTrails() {
@@ -99,7 +107,7 @@ public class Simulation{
 	}
 	
 	private void updateCollisions(){
-		if (COLLIDE){
+		if (COLLISIONS != CollisionState.NOCOLLIDE){
 			for (int i = 0; i < bodies.size(); i++)
 	        {
 	            for (int j = i + 1; j < bodies.size(); j++)
@@ -107,6 +115,25 @@ public class Simulation{
 	                if (bodies.get(i).checkCollision(bodies.get(j)))
 	                {
 	                	bodies.get(i).reactToCollision(bodies.get(j));
+	                	
+	                	if (COLLISIONS == CollisionState.ABSORB){
+		                	Body biggerBody;
+		                	Body smallerBody; 
+		                	int deleteIndex;
+		                	
+		                	if(bodies.get(i).getMass() >= bodies.get(j).getMass()){
+		                		biggerBody = bodies.get(i);
+		                		smallerBody = bodies.get(j);
+		                		deleteIndex = j;
+		                	} else{
+		                		biggerBody = bodies.get(j);
+		                		smallerBody = bodies.get(i);
+		                		deleteIndex = i;
+		                	}
+		                	
+		                	biggerBody.addMass(smallerBody.getMass());
+		                	bodies.remove(deleteIndex);
+	                	}
 	                }
 	            }
 	        }
@@ -122,11 +149,11 @@ public class Simulation{
 	}
 
 	private void createCircle(Vector2 center, Vector2 velocity){
-		for (int i = -BRUSH_SIZE / 2; i < BRUSH_SIZE / 2; i++){
-			for (int j = -BRUSH_SIZE / 2; j < BRUSH_SIZE / 2; j++){
-				if (new Vector2(i, j).dst(0, 0) < BRUSH_SIZE / 2){
+		for (int i = -BRUSH_SIZES[BRUSH_SIZE] / 2; i < BRUSH_SIZES[BRUSH_SIZE] / 2; i++){
+			for (int j = -BRUSH_SIZES[BRUSH_SIZE] / 2; j < BRUSH_SIZES[BRUSH_SIZE] / 2; j++){
+				if (new Vector2(i, j).dst(0, 0) < BRUSH_SIZES[BRUSH_SIZE] / 2){
 					Vector2 pos = new Vector2(center.x + 2*i*BODY_RADIUS, center.y + 2*j*BODY_RADIUS);
-					bodies.add(new Body(BODY_MASS, BODY_RADIUS, pos, velocity.cpy()));
+					bodies.add(new Body(bodyMass(BODY_RADIUS), BODY_RADIUS, pos, velocity.cpy()));
 				}
 			}
 		}
@@ -154,9 +181,10 @@ public class Simulation{
 		bodies.clear();
 		stars.clear();
 		
-		Body star = new Body(SOLAR_MASS, 64, new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2), new Vector2(0,0.0f));
+		Body star = new Body(bodyMass(64), 64, new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2), new Vector2(0,0.0f));
 		star.fixed = true;
 		bodies.add(star);
 		stars.add(star);
 	}
+	
 }

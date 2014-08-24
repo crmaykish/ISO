@@ -5,6 +5,13 @@ import com.badlogic.gdx.math.Rectangle;
 public abstract class AbstractButton implements Clickable {
 	private boolean clicked;
 
+	private float x, y;
+	
+	public AbstractButton(float x, float y){
+		this.setX(x);
+		this.setY(y);
+	}
+	
 	public abstract String getText();
 	
 	@Override
@@ -30,6 +37,22 @@ public abstract class AbstractButton implements Clickable {
 	@Override
 	public Rectangle getRectangle() {
 		return new Rectangle(getX(), getY(), getWidth(), getHeight());
+	}
+
+	public float getX() {
+		return x;
+	}
+
+	public void setX(float x) {
+		this.x = x;
+	}
+
+	public float getY() {
+		return y;
+	}
+
+	public void setY(float y) {
+		this.y = y;
 	}
 
 }

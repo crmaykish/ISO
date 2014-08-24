@@ -85,7 +85,6 @@ public class Renderer {
 	}
 
 	private void renderButtons(List<AbstractButton> buttons) {
-		
 		for (AbstractButton b : buttons){
 			Vector2 realPos = getTopLeftCorner().cpy().add(b.getX(), b.getY());
 			batch.draw((b.isClicked() ? buttonClicked : button), realPos.x, realPos.y);
