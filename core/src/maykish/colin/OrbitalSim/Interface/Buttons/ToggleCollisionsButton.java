@@ -10,18 +10,18 @@ public class ToggleCollisionsButton extends AbstractButton {
 	}
 
 	@Override
+	public String getText() {
+		return "Collisions: " + (Simulation.COLLIDE ? "On" : "Off");
+	}
+
+	@Override
 	public float getX() {
 		return 0;
 	}
 
 	@Override
 	public float getY() {
-		return 64;
-	}
-
-	@Override
-	public String getText() {
-		return "Collisions: " + (Simulation.COLLIDE ? "On" : "Off");
+		return 0;
 	}
 
 }

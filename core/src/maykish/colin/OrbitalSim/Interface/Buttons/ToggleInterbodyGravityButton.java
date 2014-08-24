@@ -10,18 +10,20 @@ public class ToggleInterbodyGravityButton extends AbstractButton {
 	}
 
 	@Override
+	public String getText() {
+		return "Interbody Grav: " + (Simulation.INTERBODY_GRAVITY ? "On" : "Off");
+	}
+
+	@Override
 	public float getX() {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public float getY() {
-		return 128;
-	}
-
-	@Override
-	public String getText() {
-		return "Interbody Grav: " + (Simulation.INTERBODY_GRAVITY ? "On" : "Off");
+		// TODO Auto-generated method stub
+		return 64;
 	}
 
 }

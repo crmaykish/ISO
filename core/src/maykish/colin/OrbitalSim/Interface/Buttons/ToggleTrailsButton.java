@@ -10,18 +10,20 @@ public class ToggleTrailsButton extends AbstractButton {
 	}
 
 	@Override
+	public String getText() {
+		return "Trails: " + (Simulation.SHOW_TRAILS ? "On" : "Off");
+	}
+
+	@Override
 	public float getX() {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public float getY() {
-		return 0;
-	}
-
-	@Override
-	public String getText() {
-		return "Trails: " + (Simulation.SHOW_TRAILS ? "On" : "Off");
+		// TODO Auto-generated method stub
+		return 128;
 	}
 
 }

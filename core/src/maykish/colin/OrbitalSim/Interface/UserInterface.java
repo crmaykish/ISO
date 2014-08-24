@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import maykish.colin.OrbitalSim.Simulation;
-import maykish.colin.OrbitalSim.Interface.Buttons.Button;
+import maykish.colin.OrbitalSim.Interface.Buttons.AbstractButton;
+import maykish.colin.OrbitalSim.Interface.Buttons.Clickable;
 import maykish.colin.OrbitalSim.Interface.Buttons.ToggleCollisionsButton;
 import maykish.colin.OrbitalSim.Interface.Buttons.ToggleInterbodyGravityButton;
 import maykish.colin.OrbitalSim.Interface.Buttons.ToggleTrailsButton;
@@ -19,7 +20,7 @@ public class UserInterface {
 
 	int height, width;
 
-	List<Button> buttons;
+	List<AbstractButton> buttons;
 	List<Status> statuses;
 
 	public UserInterface(Simulation sim) {
@@ -28,7 +29,7 @@ public class UserInterface {
 		height = Gdx.graphics.getHeight();
 		width = Gdx.graphics.getWidth();
 
-		buttons = new ArrayList<Button>();
+		buttons = new ArrayList<AbstractButton>();
 
 		buttons.add(new ToggleTrailsButton());
 		buttons.add(new ToggleCollisionsButton());
@@ -36,14 +37,14 @@ public class UserInterface {
 
 	}
 
-	public List<Button> getButtons() {
+	public List<AbstractButton> getButtons() {
 		return buttons;
 	}
 
 	// if there's button being clicked, handled it and return true,
 	// otherwise, false
 	public boolean buttonClickUp(float x, float y){
-		for (Button b : buttons){
+		for (Clickable b : buttons){
 			Rectangle rect = new Rectangle(b.getX(), b.getY(), 128, 64);
 			if (rect.contains(x, y)){
 				b.effect(sim);
@@ -55,7 +56,7 @@ public class UserInterface {
 	}
 	
 	public boolean buttonClickDown(float x, float y){
-		for (Button b : buttons){
+		for (Clickable b : buttons){
 			Rectangle rect = new Rectangle(b.getX(), b.getY(), 128, 64);
 			if (rect.contains(x, y)){
 				b.setClicked(true);

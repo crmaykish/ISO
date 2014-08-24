@@ -8,7 +8,8 @@ import java.util.List;
 import maykish.colin.OrbitalSim.Bodies.Body;
 import maykish.colin.OrbitalSim.Bodies.Rocket;
 import maykish.colin.OrbitalSim.Interface.UserInterface;
-import maykish.colin.OrbitalSim.Interface.Buttons.Button;
+import maykish.colin.OrbitalSim.Interface.Buttons.AbstractButton;
+import maykish.colin.OrbitalSim.Interface.Buttons.Clickable;
 import maykish.colin.OrbitalSim.Utils.MaxSizeList;
 
 import com.badlogic.gdx.Gdx;
@@ -83,9 +84,9 @@ public class Renderer {
 		
 	}
 
-	private void renderButtons(List<Button> buttons) {
+	private void renderButtons(List<AbstractButton> buttons) {
 		
-		for (Button b : buttons){
+		for (AbstractButton b : buttons){
 			Vector2 realPos = getTopLeftCorner().cpy().add(b.getX(), b.getY());
 			batch.draw((b.isClicked() ? buttonClicked : button), realPos.x, realPos.y);
 			font.draw(batch, b.getText(), realPos.x + 2, realPos.y + 26);
