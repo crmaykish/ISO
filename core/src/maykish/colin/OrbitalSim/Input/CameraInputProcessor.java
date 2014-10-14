@@ -67,9 +67,9 @@ public class CameraInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean scrolled(int amount) {
-		float level = (float)amount / 2;
-		if (camera.zoom + level >= 1.0f && camera.zoom + level < 20.0f)
-			camera.zoom += level;
+//		float level = (float)amount / 2;
+//		if (camera.zoom + level >= 1.0f && camera.zoom + level < 20.0f)
+//			camera.zoom += level;
 		return false;
 	}
 
