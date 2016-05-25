@@ -15,7 +15,6 @@ public class BrushSizeButton extends AbstractButton {
 		} else {
 			Simulation.BRUSH_SIZE = 0;
 		}
-
 	}
 
 	@Override

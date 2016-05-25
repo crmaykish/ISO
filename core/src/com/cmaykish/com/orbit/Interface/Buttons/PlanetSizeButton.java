@@ -6,7 +6,6 @@ public class PlanetSizeButton extends AbstractButton{
 
 	public PlanetSizeButton(float x, float y) {
 		super(x, y);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -16,7 +15,6 @@ public class PlanetSizeButton extends AbstractButton{
 		} else {
 			Simulation.BODY_RADIUS = 8;
 		}
-		
 	}
 
 	@Override

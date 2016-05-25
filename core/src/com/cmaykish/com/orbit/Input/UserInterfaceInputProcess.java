@@ -8,7 +8,6 @@ import com.cmaykish.com.orbit.Interface.UserInterface;
  */
 public class UserInterfaceInputProcess implements InputProcessor {
 
-	
 	boolean touching = false;
 
 	UserInterface ui;

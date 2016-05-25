@@ -7,9 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.cmaykish.com.orbit.OrbitalSim;
 
 public abstract class AbstractScreen implements Screen {
-
 	OrbitalSim game;
-	
 	SpriteBatch batch;
 	
 	public AbstractScreen(OrbitalSim game) {
@@ -19,7 +17,7 @@ public abstract class AbstractScreen implements Screen {
 	
 	@Override
 	public void show() {
-		
+
 	}
 
 	@Override

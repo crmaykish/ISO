@@ -23,7 +23,7 @@ public class BodyInputProcessor implements InputProcessor{
 
 		return true;
 	}
-	
+
 	@Override
 	public boolean keyDown(int keycode) {
 		return false;

@@ -29,11 +29,7 @@ public class CameraInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		if (startX == screenX && startY == screenY) {
-			return false;
-		}
-
-		return true;
+        return !(startX == screenX && startY == screenY);
 	}
 
 	@Override

@@ -2,8 +2,6 @@ package com.cmaykish.com.orbit.Interface;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.cmaykish.com.orbit.Interface.Buttons.*;
@@ -24,7 +22,7 @@ public class UserInterface {
 		height = Gdx.graphics.getHeight();
 		width = Gdx.graphics.getWidth();
 
-		buttons = new ArrayList<AbstractButton>();
+		buttons = new ArrayList<>();
 
 		buttons.add(new ToggleTrailsButton(0, 0));
 		buttons.add(new ToggleCollisionsButton(0, 64));
@@ -33,7 +31,6 @@ public class UserInterface {
 		buttons.add(new PlanetSizeButton(0, 256));
 		buttons.add(new ResetSimulationButton(camera, 0, 320));
 		buttons.add(new ToggleGameStateButton(0, 384));
-
 	}
 
 	public List<AbstractButton> getButtons() {

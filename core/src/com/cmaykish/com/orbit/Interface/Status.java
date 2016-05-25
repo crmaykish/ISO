@@ -7,6 +7,4 @@ package com.cmaykish.com.orbit.Interface;
  */
 public class Status {
 
-	
-	
 }

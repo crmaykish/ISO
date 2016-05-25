@@ -4,12 +4,12 @@ import com.badlogic.gdx.math.Rectangle;
 import com.cmaykish.com.orbit.Simulation;
 
 public interface Clickable {
-	public void effect(Simulation sim);
-//	public float getX();
-//	public float getY();
-	public float getWidth();
-	public float getHeight();
-	public Rectangle getRectangle();
-	public boolean isClicked();
-	public void setClicked(boolean clicked);
+	void effect(Simulation sim);
+//	float getX();
+//	float getY();
+	float getWidth();
+	float getHeight();
+	Rectangle getRectangle();
+	boolean isClicked();
+	void setClicked(boolean clicked);
 }

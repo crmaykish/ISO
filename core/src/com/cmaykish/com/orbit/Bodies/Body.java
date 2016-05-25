@@ -21,7 +21,7 @@ public class Body{
 		this.position = initPosition;
 		this.velocity = initVelocity;
 		this.fixed = false;
-		this.trail = new MaxSizeList<Vector2>(MAX_TRAIL_SIZE);
+		this.trail = new MaxSizeList<>(MAX_TRAIL_SIZE);
 	}
 	
 	public boolean checkCollision(Body otherBody){
@@ -68,15 +68,18 @@ public class Body{
 	
 	@Override
 	public boolean equals(Object obj) {
-		Body other = (Body) obj;
-		if (position.x == other.position.x &&
-			position.y == other.position.y &&
-			velocity.x == other.velocity.x &&
-			velocity.y == other.velocity.y &&
-			mass == other.mass &&
-			radius == other.radius){
-			return true;
-		}
+		if (obj instanceof Body){
+            Body other = (Body) obj;
+            if (position.x == other.position.x &&
+                    position.y == other.position.y &&
+                    velocity.x == other.velocity.x &&
+                    velocity.y == other.velocity.y &&
+                    mass == other.mass &&
+                    radius == other.radius){
+                return true;
+            }
+        }
+
 		return false;
 	}
 

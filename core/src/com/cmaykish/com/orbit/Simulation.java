@@ -9,10 +9,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.cmaykish.com.orbit.Bodies.Body;
 
 public class Simulation{
-	
-	// TODO: store this in the UI class too
-	public boolean launch = false;
-	
 	// Game State
 	public static boolean RUNNING = true;
 	
@@ -36,11 +32,10 @@ public class Simulation{
 	public static int BRUSH_SIZE = 0;
 	public static int BRUSH_SIZES[] = { 2, 6, 11, 16, 21, 26, 31 };
 	public static int BODY_RADIUS = 8;
-//	public static int BODY_MASS = 10000;
-	
+
 	public Simulation(){
-		bodies = new ArrayList<Body>();
-		stars = new ArrayList<Body>();
+		bodies = new ArrayList<>();
+		stars = new ArrayList<>();
 		
 		reset();
 	}
@@ -49,16 +44,7 @@ public class Simulation{
 		return (int) (Math.pow(radius, 3) * 1000);
 	}
 	
-	public void addBody(Vector2 pos, Vector2 vel){
-		bodies.add(new Body(bodyMass(BODY_RADIUS), BODY_RADIUS, pos, vel));
-	}
-	
-	public Vector2 getLaunchVelocity(Vector2 start, Vector2 end){
-		return (end.cpy().sub(start)).scl(0.02f);
-	}
-	
 	public void update(){
-		
 		if(Gdx.input.isKeyPressed(Keys.ESCAPE)){
 			Gdx.app.exit();
 		}

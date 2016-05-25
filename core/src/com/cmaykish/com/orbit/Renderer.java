@@ -1,7 +1,6 @@
 package com.cmaykish.com.orbit;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -14,11 +13,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.cmaykish.com.orbit.Bodies.Body;
 import com.cmaykish.com.orbit.Interface.Buttons.AbstractButton;
 import com.cmaykish.com.orbit.Interface.UserInterface;
@@ -30,16 +26,14 @@ public class Renderer {
 	
 	private HashMap<Integer, TextureRegion> ballTextures;
 	private TextureRegion background;
-	private TextureRegion rocket;
 	private TextureRegion button;
 	private TextureRegion buttonClicked;
 	private BitmapFont font;
 	private DecimalFormat decFormat;
-	
+
 	public Vector2 start;
 	public Vector2 end;
-	
-	
+
 	public Renderer(SpriteBatch batch, OrthographicCamera camera){
 		this.batch = batch;
 		this.camera = camera;
@@ -50,7 +44,6 @@ public class Renderer {
 		
 		start = new Vector2();
 		end = new Vector2();
-		
 	}
 	
 	public void render(Simulation sim, UserInterface ui){
@@ -77,7 +70,6 @@ public class Renderer {
 	
 	private void renderLaunch() {
 		shapeRenderer.line(start, end);
-		
 	}
 
 	private void renderButtons(List<AbstractButton> buttons) {
@@ -86,7 +78,6 @@ public class Renderer {
 			batch.draw((b.isClicked() ? buttonClicked : button), realPos.x, realPos.y);
 			font.draw(batch, b.getText(), realPos.x + 2, realPos.y + 26);
 		}
-		
 	}
 
 	private void renderTrails(List<Body> bodies) {
@@ -127,13 +118,11 @@ public class Renderer {
 		ballTextures.put(64, new TextureRegion(new Texture(Gdx.files.internal("pPlanet128.png"))));
 		ballTextures.put(128, new TextureRegion(new Texture(Gdx.files.internal("ball256.png"))));
 		
-//		rocket = new TextureRegion(new Texture(Gdx.files.internal("rocket.png")));
 		background = new TextureRegion(new Texture(Gdx.files.internal("starfield.png")));
 		
 		button = new TextureRegion(new Texture(Gdx.files.internal("button.png")));
 		buttonClicked = new TextureRegion(new Texture(Gdx.files.internal("button-clicked.png")));
 		
-//		rocket.flip(false, true);
 		background.flip(false, true);
 		button.flip(false, true);
 		buttonClicked.flip(false, true);
